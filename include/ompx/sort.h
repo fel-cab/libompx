@@ -40,8 +40,10 @@ void sort(T *B, uint32_t NumElements, ompx_sort_cmp_ty Cmp) {
   int ndev = omp_get_num_devices();
   int present = 0;
   if (ndev > 0)  //check if the data is present in any of the devices
-    for (int dev=0; dev < ndev; ++dev) 
+    for (int dev=0; dev < ndev; ++dev) { 
       present = omp_target_is_present(B,dev);
+      if (present) break;
+    }
     
   if (ndev > 0 && present) {
     #pragma omp target data use_device_ptr(B)
@@ -113,8 +115,10 @@ void sort_by_key(T1 *B, uint32_t NumElements, T2 *V, ompx_sort_cmp_ty Cmp) {
   int ndev = omp_get_num_devices();
   int present = 0;
   if (ndev > 0)  //check if the data is present in any of the devices
-    for (int dev=0; dev < ndev; ++dev) 
+    for (int dev=0; dev < ndev; ++dev) {
       present = omp_target_is_present(B,dev);
+      if (present) break;
+    }
     
   if (ndev > 0 && present) {
     #pragma omp target data use_device_ptr(B,V)
